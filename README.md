@@ -1,15 +1,12 @@
 # 🧾 Introdução a Técnicas de Programação - Unidade 1  
-**Aluno:** Maria Carvalho  
-**Matrícula:** (adicione aqui seu número)  
-**Período:** 2025.2  
+**Aluno:** Maria Eduarda dos Santos Carvalho  
+**Matrícula:** 20250033141
 
 ---
 
 ## 📁 Estrutura do Projeto
 - **projeto/**: Sistema de Denúncias Anônimas em C
 - **listas/**: Soluções das listas de exercícios
-- **README.md**: Este arquivo
-
 ---
 
 ## 🚨 Projeto: Sistema de Denúncias Anônimas
@@ -17,10 +14,7 @@
 **Descrição:**  
 Este projeto implementa um sistema simples de **registro e consulta de denúncias anônimas**, desenvolvido inteiramente na linguagem **C**.  
 A aplicação permite ao usuário cadastrar, listar e pesquisar denúncias sem identificação.  
-O foco está no uso de **vetores e funções**, conceitos fundamentais estudados na **Unidade 1** da disciplina.
-
-**Repositório:** `carvalho-maria-itp-u1-2025-2`  
-**Vídeo de Demonstração:** Entrega da U1  
+O foco está no uso de **condicionais, vetores e funções**, conceitos fundamentais estudados na **Unidade 1** da disciplina.
 
 ---
 
@@ -34,7 +28,7 @@ O foco está no uso de **vetores e funções**, conceitos fundamentais estudados
   Mostra todas as denúncias registradas, com formatação amigável no terminal.
 
 - **Pesquisa por Tipo:**  
-  Permite filtrar denúncias de um tipo específico (por exemplo, “Furto”, “Assédio” etc.), comparando de forma case-insensitive.
+  Permite filtrar denúncias de um tipo específico (por exemplo, “Furto”, “Assédio” etc.).
 
 - **Interface Textual Limpa:**  
   Menus e cabeçalhos bem organizados para facilitar o uso no terminal.
@@ -76,9 +70,11 @@ typedef struct {
     char local[50];
     char descricao[200];
 } Denuncia; 
+```
 
 ## 🧪 Exemplo de Execução
 
+```b
 ===========================================
        SISTEMA DE DENUNCIAS ANONIMAS
 ===========================================
@@ -96,20 +92,17 @@ Local do ocorrido: Biblioteca
 Descricao: Furto de mochila na mesa 4
 
  Denuncia registrada anonimamente com sucesso!
-
+```
 ## 🧮 Instruções de Compilação e Execução
-
-# Compilação
+```b
 gcc main.c -o p
-
-# Execução
 ./p
-
+```
 
 ## 🎯 Principais Aprendizados
 
 Desenvolver este sistema foi uma ótima oportunidade para aplicar de forma prática os conceitos fundamentais da programação em C.
-Durante a implementação, foi possível compreender melhor o uso de estruturas, vetores, funções e condicionais, além de boas práticas como modularização e validação de entrada.
+Durante a implementação, foi possível compreender melhor o uso de vetores, funções e condicionais, além de boas práticas como modularização e validação de entrada.
 
 Foi um projeto simples, mas muito útil para consolidar a base da linguagem e o raciocínio lógico necessário para desenvolver aplicações maiores no futuro.
 
@@ -121,4 +114,5 @@ Foi um projeto simples, mas muito útil para consolidar a base da linguagem e o 
 
 - Editor: Visual Studio Code
 
-Link do repositório: https://github.com/EduardaCarvalho-dv/carvalho-maria-itp-2025-2.git
+
+#### [Link do repositório](https://github.com/EduardaCarvalho-dv/carvalho-maria-itp-2025-2)

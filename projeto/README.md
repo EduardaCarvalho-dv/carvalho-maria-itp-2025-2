@@ -1,7 +1,7 @@
 # 🧾 Sistema de Denúncias em C
 
 Um sistema simples desenvolvido em **linguagem C**, que permite **registrar, listar e pesquisar denúncias** diretamente pelo terminal.  
-O projeto foi criado com foco em **manipulação de estruturas, strings e arquivos**, servindo como exercício prático de programação estruturada em C.
+O projeto foi criado com o objetivo de exercitar conceitos da programação estruturada, como uso de **funções, vetores e manipulação de strings**, aplicados na construção de uma solução voltada à organizar informações.
 
 ---
 
@@ -11,11 +11,9 @@ No terminal, navegue até a pasta do projeto e execute o comando:
 
 ```bash
 gcc main.c -o p
-
 ./p
-
+```
 ## 🧩 Funcionalidades
-
 
 | Opção | Descrição                                                                        |
 | ----- | -------------------------------------------------------------------------------- |
