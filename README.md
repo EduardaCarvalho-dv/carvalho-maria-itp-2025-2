@@ -14,15 +14,9 @@
 **Descrição:**  
 Este projeto implementa um sistema simples de **registro e consulta de denúncias anônimas**, desenvolvido inteiramente na linguagem **C**.  
 A aplicação permite ao usuário cadastrar, listar e pesquisar denúncias sem identificação.  
-O foco está no uso de **condicionais, vetores e funções**, conceitos fundamentais estudados na **Unidade 1** da disciplina.
-
 ---
 
 ## ⚙️ Funcionalidades Implementadas
-
-- **Cadastro de Denúncia:**  
-  O usuário pode registrar uma nova denúncia informando tipo, local e descrição.  
-  As informações são armazenadas em uma estrutura (`struct`) e salvas em um vetor global.
 
 - **Listagem de Denúncias:**  
   Mostra todas as denúncias registradas, com formatação amigável no terminal.
@@ -62,15 +56,6 @@ O código é modularizado em funções independentes, facilitando leitura e manu
 - `exibirCabecalho()`: Centraliza a formatação visual do programa.
 
 ---
-
-## 🧩 Estrutura de Dados Principal
-```c
-typedef struct {
-    char tipo[50];
-    char local[50];
-    char descricao[200];
-} Denuncia; 
-```
 
 ## 🧪 Exemplo de Execução
 

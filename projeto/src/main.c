@@ -1,141 +1,147 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-#include <locale.h>
+#include <signal.h>
+#include "denuncias.h"
+#include "storage.h"
+#include "utils.h"
 
-#define MAX_DENUNCIAS 100
-#define TAM_TEXTO 200
+#define DB_FILE "denuncias.db"
 
-typedef struct {
-    char tipo[50];
-    char local[50];
-    char descricao[TAM_TEXTO];
-} Denuncia;
-
-Denuncia denuncias[MAX_DENUNCIAS];
-int totalDenuncias = 0;
-
-void limparBuffer() {
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF);
+static void on_sigint(int sig) {
+    (void)sig;
+    printf("\n\n[CTRL+C] Salvando dados antes de sair...\n");
+    salvar_arquivo(DB_FILE);
+    free_denuncias();
+    printf("Dados salvos. Encerrando.\n");
+    exit(0);
 }
 
-void exibirCabecalho() {
-    printf("===========================================\n");
-    printf("       SISTEMA DE DENUNCIAS ANONIMAS       \n");
-    printf("===========================================\n");
+static void exibir_menu() {
+    printf("\n=========================================\n");
+    printf("      SISTEMA DE DENUNCIAS ANONIMAS      \n");
+    printf("=========================================\n");
+    printf("1 - Fazer nova denuncia\n");
+    printf("2 - Listar denuncias\n");
+    printf("3 - Buscar por palavra-chave\n");
+    printf("4 - Remover denuncia\n");
+    printf("5 - Exportar CSV\n");
+    printf("0 - Sair\n");
+    printf("-----------------------------------------\n");
+    printf("Escolha: ");
 }
 
-// Função para exibir o menu principal
-void exibirMenu() {
-    exibirCabecalho();
-    printf("1  Fazer nova denuncia\n");
-    printf("2  Listar denuncias\n");
-    printf("3  Pesquisar denuncias por tipo\n");
-    printf("0  Sair\n");
-    printf("-------------------------------------------\n");
-    printf("Escolha uma opcao: ");
-}
-
-// Função para cadastrar nova denúncia
-void cadastrarDenuncia() {
-    if (totalDenuncias >= MAX_DENUNCIAS) {
-        printf("\n  Limite maximo de denuncias atingido!\n");
-        return;
-    }
-
+void cadastrar() {
     Denuncia d;
-    limparBuffer();
+    printf("\nNovo cadastro de denuncia\n");
+    
+    readline_strip("Tipo: ", d.tipo, sizeof(d.tipo));
+    readline_strip("Local: ", d.local, sizeof(d.local));
+    readline_strip("Descricao: ", d.descricao, sizeof(d.descricao));
 
-    printf("\n Cadastro de Denuncia\n");
-    printf("-------------------------------------------\n");
-
-    printf("Tipo da denuncia (ex: Assedio, Furto, outro...): ");
-    fgets(d.tipo, sizeof(d.tipo), stdin);
-    d.tipo[strcspn(d.tipo, "\n")] = 0;
-
-    printf("Local do ocorrido: ");
-    fgets(d.local, sizeof(d.local), stdin);
-    d.local[strcspn(d.local, "\n")] = 0;
-
-    printf("Descricao: ");
-    fgets(d.descricao, sizeof(d.descricao), stdin);
-    d.descricao[strcspn(d.descricao, "\n")] = 0;
-
-    denuncias[totalDenuncias] = d;
-    totalDenuncias++;
-
-    printf("\n Denuncia registrada anonimamente com sucesso!\n");
+    adicionar_denuncia(&d);
+    printf("Denuncia registrada com sucesso!\n");
 }
 
-// Função para listar denúncias
-void listarDenuncias() {
-    if (totalDenuncias == 0) {
-        printf("\n Nenhuma denuncia registrada ainda.\n");
+void listar() {
+    size_t t = total_denuncias();
+    if (t == 0) {
+        printf("\nNenhuma denuncia cadastrada.\n");
         return;
     }
 
-    printf("\n Lista de Denuncias\n");
-    printf("-------------------------------------------\n");
-    for (int i = 0; i < totalDenuncias; i++) {
-        printf("\nDenuncia #%d\n", i + 1);
-        printf("Tipo: %s\n", denuncias[i].tipo);
-        printf("Local: %s\n", denuncias[i].local);
-        printf("Descricao: %s\n", denuncias[i].descricao);
-        printf("-------------------------------------------\n");
+    printf("\n=== Lista de denuncias (%zu) ===\n", t);
+    for (size_t i = 0; i < t; i++) {
+        const Denuncia *d = obter_denuncia(i);
+        printf("\nDenuncia #%zu\n", i + 1);
+        printf("Tipo: %s\n", d->tipo);
+        printf("Local: %s\n", d->local);
+        printf("Descricao: %s\n", d->descricao);
     }
 }
 
-void pesquisarPorTipo() {
-    if (totalDenuncias == 0) {
-        printf("\n Nenhuma denuncia registrada.\n");
+void buscar() {
+    char palavra[100];
+    readline_strip("\nBuscar palavra: ", palavra, sizeof(palavra));
+
+    int indices[256];
+    int n = buscar_por_palavra(palavra, indices, 256);
+
+    if (n == 0) {
+        printf("Nenhuma denuncia encontrada contendo \"%s\".\n", palavra);
         return;
     }
 
-    char tipoBusca[50];
-    limparBuffer();
+    printf("\nEncontradas %d denuncias:\n", n);
 
-    printf("\n Digite o tipo de denuncia para buscar: ");
-    fgets(tipoBusca, sizeof(tipoBusca), stdin);
-    tipoBusca[strcspn(tipoBusca, "\n")] = 0;
-
-    printf("\n=== Resultados para \"%s\" ===\n", tipoBusca);
-    int encontrados = 0;
-
-    for (int i = 0; i < totalDenuncias; i++) {
-        if (strcasecmp(denuncias[i].tipo, tipoBusca) == 0) {
-            printf("\nDenuncia #%d\n", i + 1);
-            printf("Local: %s\n", denuncias[i].local);
-            printf("Descricao: %s\n", denuncias[i].descricao);
-            printf("-------------------------------------------\n");
-            encontrados++;
-        }
-    }
-
-    if (encontrados == 0) {
-        printf("  Nenhuma denuncia encontrada desse tipo.\n");
+    for (int i = 0; i < n; i++) {
+        const Denuncia *d = obter_denuncia(indices[i]);
+        printf("\nDenuncia #%d\n", indices[i] + 1);
+        printf("Tipo: %s\n", d->tipo);
+        printf("Local: %s\n", d->local);
+        printf("Descricao: %s\n", d->descricao);
     }
 }
 
-int main() {
+void remover() {
+    size_t t = total_denuncias();
+    if (t == 0) {
+        printf("Nenhuma denuncia para remover.\n");
+        return;
+    }
+
+    listar();
+
+    int id;
+    printf("\nDigite o numero da denuncia para remover: ");
+    scanf("%d", &id);
+    limpar_buffer();
+
+    if (id < 1 || (size_t)id > t) {
+        printf("ID invalido.\n");
+        return;
+    }
+
+    remover_denuncia(id - 1);
+    printf("Denuncia removida.\n");
+}
+
+int main(void) {
+    signal(SIGINT, on_sigint);
+
+    init_denuncias();
+
+    if (!carregar_arquivo(DB_FILE)) {
+        printf("Nenhum banco carregado. Iniciando novo.\n");
+    }
 
     int opcao;
     do {
-        exibirMenu();
+        exibir_menu();
         scanf("%d", &opcao);
+        limpar_buffer();
 
         switch (opcao) {
-            case 1: cadastrarDenuncia(); break;
-            case 2: listarDenuncias(); break;
-            case 3: pesquisarPorTipo(); break;
-            case 0: printf("\n Encerrando o sistema. Obrigado por usar!\n"); break;
-            default: printf("\n X Opcao invalida! Tente novamente.\n");
+            case 1: cadastrar(); break;
+            case 2: listar(); break;
+            case 3: buscar(); break;
+            case 4: remover(); break;
+            case 5:
+                if (exportar_csv("denuncias.csv"))
+                    printf("CSV exportado com sucesso!\n");
+                else
+                    printf("Erro ao exportar CSV.\n");
+                break;
+            case 0: 
+                salvar_arquivo(DB_FILE);
+                printf("Saindo... Arquivo salvo.\n");
+                break;
+            default:
+                printf("Opcao invalida.\n");
         }
-
-        printf("\nPressione ENTER para continuar...");
-        limparBuffer();
-        getchar();
 
     } while (opcao != 0);
 
+    free_denuncias();
     return 0;
 }

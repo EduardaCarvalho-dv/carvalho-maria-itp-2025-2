@@ -14,11 +14,11 @@ gcc main.c -o p
 ./p
 ```
 ## 🧩 Funcionalidades
-
-| Opção | Descrição                                                                        |
-| ----- | -------------------------------------------------------------------------------- |
-| `1️⃣` | **Fazer nova denúncia** — Permite registrar uma nova denúncia anonimamente.      |
-| `2️⃣` | **Listar denúncias** — Exibe todas as denúncias registradas.                     |
-| `3️⃣` | **Pesquisar por tipo** — Busca denúncias específicas com base no tipo informado. |
-| `0️⃣` | **Sair** — Encerra o programa de forma segura.                                   |
-
+| Opção | Descrição                                                                                              |
+|-------|----------------------------------------------------------------------------------------------------------|
+| `1️⃣` | **Fazer nova denúncia** — Cadastra uma nova denúncia no vetor dinâmico e salva automaticamente no arquivo. |
+| `2️⃣` | **Listar denúncias** — Exibe todas as denúncias já registradas.                                            |
+| `3️⃣` | **Buscar por palavra-chave** — Permite pesquisar uma denúncia por qualquer palavra presente nos campos.   |
+| `4️⃣` | **Remover denúncia** — Apaga uma denúncia específica e reorganiza o vetor dinâmico.                        |
+| `5️⃣` | **Exportar CSV** — Gera um arquivo `.csv` contendo todas as denúncias registradas no sistema.             |
+| `0️⃣` | **Sair** — Encerra o programa de forma segura, garantindo a preservação dos dados.                         |
